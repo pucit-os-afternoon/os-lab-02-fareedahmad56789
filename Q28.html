@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="jquery-ui-1.13.2/jquery-ui.css">
+    <link rel="stylesheet" href="jquery-ui-1.13.2/jquery-ui.structure.css">
+    <link rel="stylesheet" href="jquery-ui-1.13.2/jquery-ui.theme.css">
+    <title>Q28</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 0.5em 0px;
+            background-color: antiquewhite;
+        }
+
+        .container {
+
+            width: 50%;
+            margin: 20px auto;
+            padding: 0px 20px 30px 20px;
+            border: 0.5px solid rgb(95, 92, 92);
+            border-radius: 5px;
+
+        }
+
+        input[type=text] {
+            width: 100%;
+            display: block;
+            height: 30px;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: rgb(11, 107, 107);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>Number of Days</h1>
+
+        <label for="from">From Date:
+            <input type="text" id="from" readonly='true'>
+            <label for="to">To Date:</label>
+            <input type="text" id="to" readonly='true'>
+            <button id="calculate">Calculate Days</button>
+            <p id="daysDiff"></p>
+            <p id="exceptionPrint"></p>
+
+
+    </div>
+
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"
+    integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script src="jquery-ui-1.13.2/jquery-ui.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        $("#from").datepicker({
+            changeMonth: true,
+            changeYear: true,
+
+            onSelect: function (date) {
+                let date1 = new Date($('#from').datepicker("getDate"));
+                let date2 = new Date($("#to").datepicker("getDate"));
+                if (date1 > date2) {
+                    $("#to").datepicker("setDate", date1);
+                }
+                $("#to").datepicker("option", "minDate", date1);
+
+            }
+
+        });
+        $("#to").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            minDate: $('#from').datepicker('getDate'),
+            onClose: function () {
+                let date1 = new Date($('#from').datepicker('getDate'));
+                let date2 = new Date($('#from').datepicker('getDate'));
+                //check to prevent a user from entering a date below date of dt1
+                if (date2 <= date1) {
+                    var minDate = $('#to2').datepicker('option', 'minDate');
+                    $('#to').datepicker('setDate', minDate);
+                }
+            }
+
+        });
+        $("#calculate").click(function () {
+
+            // validation would not allow user to make date with label "To date" smaller than "from date" spcecified in the datepicker
+            // if user input was empty an exception will be thrown to let know user
+            // to avoid wrong data input, input is made read only where date can be selected from calendar only
+
+            let date1 = new Date(Date.parse($("#from").val()));
+            let date2 = new Date(Date.parse($("#to").val()));
+            let diff;
+            try {
+                diff = (date2 - date1) / (24 * 60 * 60 * 1000);
+                if (isNaN(date1) || isNaN(date2)) {
+                    throw "Enter the the valid date"
+                }
+                else {
+                    $("#exceptionPrint").hide();
+                }
+                $("#daysDiff").text("Total number of days between dates From Date: " + date1 + " To Date: " + date2 + " are " + diff);
+
+            }
+            catch (error) {
+                $("#exceptionPrint").text(error).css("color", "red");
+            }
+
+
+        });
+    });
+
+
+
+
+</script>
+
+</html>

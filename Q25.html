@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q25</title>
+    <link rel="stylesheet" href="feedback.css">
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <h1>Click the buttons to Slide Up or Down</h1>
+    <button id="slidedown">Slide Down</button>
+    <button id="slideup">Slide UP</button>
+    <button id="toggle">Toggle Slide</button>
+    <div class="wrapper">
+        <form action="" name="feedbackform" id="feedform" required>
+            <h2>FeedBack Form</h2>
+            <label for="ID">Employee ID</label><br>
+            <input type="text" name="employeeID" id="ID" placeholder="Enter Employee Id" autofocus>
+            <p><small>we'll never share your email with anyone</small></p>
+            <p class="valid-ID">Empolyee ID can not be empty</p>
+            <label for="feedback">FeedBack</label><br>
+            <input type="text" name="EmployeeFeedback" id="feedback" placeholder="Your FeedBack?">
+            <p class="valid-feedback">feedback field is missing</p>
+            <div>
+                <input type="checkbox" name="" id="help">
+                <label for="help">Was this helpfull?</label>
+            </div>
+            <p class="checkbox-validation"></p>
+            <button id="btn" type="submit">Submit</button>
+        </form>
+        <!-- form validation is automatically being done by required -->
+    </div>
+    <br>
+    <button id="showform">Show Feedback Form</button>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"
+    integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+<script>
+
+    $(document).ready(function () {
+        $("#slidedown").click(function () {
+            $(".wrapper").slideDown(3000);
+        });
+        $("#slideup").click(function () {
+            $(".wrapper").slideUp(3000);
+        });
+        $("#toggle").click(function () {
+            $(".wrapper").slideToggle(3000);
+        })
+
+        $("#feedform").submit(function (e) {
+
+            console.log(!($(".checkbox-validation").prop("checked")));
+            // ID validation
+            let valId = $("#ID").val();
+            let valFeedback = $("#feedback").val();
+            if (valId == "") {
+                $(".valid-ID").addClass("invalid-ID").removeClass("valid-ID");
+                $("#ID").addClass("borderRed");
+                return false;
+
+            }
+            //Feedback Validation
+            else if (valFeedback == "") {
+                if ($("p").hasClass("invalid-ID")) {
+                    $(".invalid-ID").addClass("valid-ID").removeClass("invalid-ID");
+                    $("#ID").removeClass("borderRed");
+                }
+
+                $(".valid-feedback").addClass("invalid-feedback").removeClass("valid-feedback");
+                $("#feedback").addClass("borderRed");
+                return false;
+            }
+
+            //checkbox Validation
+            else if (!($("#help").prop("checked"))) {
+                if ($("p").hasClass("invalid-feedback")) {
+                    $(".invalid-feedback").addClass("valid-feedback").removeClass("invalid-feedback");
+                    $("#feedback").removeClass("borderRed");
+
+                }
+                if ($("p").hasClass("invalid-ID")) {
+                    $(".invalid-ID").addClass("valid-ID").removeClass("invalid-ID");
+                    $("#ID").removeClass("borderRed");
+
+                }
+                $(".checkbox-validation").html("please check the checkbox").css("color", "red");
+                return false;
+
+            }
+            else {
+                $(".checkbox-validation").html("");
+                $(".wrapper").hide();
+                $("#showform").show();
+                return false;
+            }
+
+        });
+        // $("#btn").click(function(){
+
+        //     $("#feedform").submit();
+
+
+        //  });
+        $("#showform").click(function () {
+
+            $("#showform").hide();
+            $(".wrapper").show();
+        });
+        function a() {
+            console.log("hello");
+        }
+
+
+    });
+
+</script>
+
+</html>
